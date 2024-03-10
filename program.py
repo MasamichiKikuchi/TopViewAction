@@ -18,6 +18,8 @@ DIR_DOWN = 1
 DIR_LEFT = 2
 DIR_RIGHT = 3
 
+score = 0
+
 player_x = 90
 player_y = 90
 
@@ -33,6 +35,11 @@ map_data = [
     [0,1,1,1,1,1,1,1,1,1,1,0]
 ]
 
+#文字の描画
+def draw_txt(txt,x,y,siz,col):
+    fnt = ("Times New Roman",siz,"bold")
+    canvas.create_text(x+2,y+2,text=txt,fill="black",font=fnt,tag="SCREEN")
+    canvas.create_text(x,y,text=txt,fill=col,font=fnt,tag="SCREEN")
 
 #ステージの描画
 def draw_screen():
@@ -41,6 +48,7 @@ def draw_screen():
         for x in range(12):
             canvas.create_image(x*60+30,y*60+30,image=img_bg[map_data[y][x]],tag="SCREEN")
     canvas.create_image(player_x,player_y,image=img_player,tag="SCREEN")
+    draw_txt("SCORE"+str(score),200,30,30,"white")
 
 #キャラクターの移動方向に壁があるか調べる
 def check_wall(cx,cy,di,dot):
@@ -82,7 +90,7 @@ def check_wall(cx,cy,di,dot):
 
 #プレイヤーを動かす
 def move_player():
-    global player_x,player_y
+    global player_x,player_y,score
     if key == "Up":
         if check_wall(player_x,player_y,DIR_UP,20) == False:
             player_y = player_y - 20
@@ -95,7 +103,12 @@ def move_player():
     if key == "Right":
         if check_wall(player_x,player_y,DIR_RIGHT,20) == False:
             player_x = player_x + 20
-
+    mx = int(player_x/60)
+    my = int(player_y/60)
+    if map_data[my][mx] == 3:
+        score = score + 100
+        map_data[my][mx] = 2
+ 
 def main():
     global key,koff
     draw_screen()
