@@ -1,4 +1,5 @@
 import tkinter
+import random
 
 #キー入力
 key = ""
@@ -22,6 +23,10 @@ score = 0
 
 player_x = 90
 player_y = 90
+
+enemy_x = 630
+enemy_y = 450
+enemy_d = 0#敵の向き
 
 map_data = [
     [0,1,1,1,1,1,1,1,1,1,1,0],
@@ -48,6 +53,7 @@ def draw_screen():
         for x in range(12):
             canvas.create_image(x*60+30,y*60+30,image=img_bg[map_data[y][x]],tag="SCREEN")
     canvas.create_image(player_x,player_y,image=img_player,tag="SCREEN")
+    canvas.create_image(enemy_x,enemy_y,image=img_enemy,tag="SCREEN")
     draw_txt("SCORE"+str(score),200,30,30,"white")
 
 #キャラクターの移動方向に壁があるか調べる
@@ -108,12 +114,31 @@ def move_player():
     if map_data[my][mx] == 3:
         score = score + 100
         map_data[my][mx] = 2
- 
+
+def move_enemy():
+    global enemy_x,enemy_y,enemy_d
+    speed = 10
+    if enemy_x%60 == 30 and enemy_y%60 == 30:
+        enemy_d = random.randint(0,3)
+    if enemy_d == DIR_UP:
+        if check_wall(enemy_x,enemy_y,enemy_d,speed) == False:
+            enemy_y = enemy_y - speed
+    if enemy_d == DIR_DOWN:
+        if check_wall(enemy_x,enemy_y,enemy_d,speed) == False:
+            enemy_y = enemy_y + speed
+    if enemy_d == DIR_LEFT:
+        if check_wall(enemy_x,enemy_y,enemy_d,speed) == False:
+            enemy_x = enemy_x - speed
+    if enemy_d == DIR_RIGHT:
+        if check_wall(enemy_x,enemy_y,enemy_d,speed) == False:
+            enemy_x = enemy_x + speed
+            
+            
 def main():
     global key,koff
     draw_screen()
     move_player()
-    
+    move_enemy()
     root.after(100,main)
 
     
@@ -125,6 +150,7 @@ img_bg = [
     tkinter.PhotoImage(file="chip03.png")
 ]
 img_player = tkinter.PhotoImage(file="pen03.png")
+img_enemy = tkinter.PhotoImage(file="red03.png")
 root.title("トップビューアクション")
 root.resizable(False,False)
 root.bind("<KeyPress>",key_down)
