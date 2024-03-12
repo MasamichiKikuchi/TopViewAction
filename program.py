@@ -111,18 +111,53 @@ def check_wall(cx,cy,di,dot):
 #プレイヤーを動かす
 def move_player():
     global player_x,player_y,score,candy
-    if key == "Up":
+
+    if key == "w":
         if check_wall(player_x,player_y,DIR_UP,20) == False:
             player_y = player_y - 20
-    if key == "Down":
+    if key == "s":
         if check_wall(player_x,player_y,DIR_DOWN,20) == False:
             player_y = player_y + 20
-    if key == "Left":
+    if key == "a":
         if check_wall(player_x,player_y,DIR_LEFT,20) == False:
             player_x = player_x - 20
-    if key == "Right":
-        if check_wall(player_x,player_y,DIR_RIGHT,20) == False:
+    if key == "d":
+        if check_wall(player_x,player_y,DIR_RIGHT,20) == False :
             player_x = player_x + 20
+    if key == "e":
+        if check_wall(player_x,player_y,DIR_UP,20) == False and check_wall(player_x,player_y,DIR_RIGHT,20) == False :
+            player_y = player_y - 20
+            player_x = player_x + 20
+    if key == "q":
+        if check_wall(player_x,player_y,DIR_UP,20) == False and check_wall(player_x,player_y,DIR_LEFT,20) == False :
+            player_y = player_y - 20
+            player_x = player_x - 20
+    if key == "x":
+        if check_wall(player_x,player_y,DIR_DOWN,20) == False and check_wall(player_x,player_y,DIR_RIGHT,20) == False :
+            player_y = player_y + 20
+            player_x = player_x + 20
+    if key == "z":
+        if check_wall(player_x,player_y,DIR_DOWN,20) == False and check_wall(player_x,player_y,DIR_LEFT,20) == False :
+            player_y = player_y + 20
+            player_x = player_x - 20 
+
+    if key == "space":
+        player_y = player_y - 1
+        player_y = player_y - 1
+        player_y = player_y - 1
+        player_y = player_y - 1
+        player_y = player_y - 1
+        player_y = player_y - 1
+        player_y = player_y - 1
+        player_y = player_y + 1
+        player_y = player_y + 1
+        player_y = player_y + 1
+        player_y = player_y + 1
+        player_y = player_y + 1
+        player_y = player_y + 1
+        player_y = player_y + 1
+        player_y = player_y + 1
+        player_y = player_y + 1
     mx = int(player_x/60)
     my = int(player_y/60)
     if map_data[my][mx] == 3:
