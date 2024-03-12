@@ -19,6 +19,9 @@ DIR_DOWN = 1
 DIR_LEFT = 2
 DIR_RIGHT = 3
 
+is_jumping = False  # ジャンプ中かどうかのフラグ
+jump_count = 6  # ジャンプの高さ調整
+
 idx = 0
 score = 0
 candy = 0
@@ -50,8 +53,8 @@ def set_stage():#ステージのデータをセットする
 def set_chara_pos():
     global player_x,player_y
     global enemy_x,enemy_y,enemy_d
-    player_x = 90
-    player_y = 90
+    player_x = 360
+    player_y = 270
     enemy_x = 630
     enemy_y = 450
 
@@ -110,7 +113,7 @@ def check_wall(cx,cy,di,dot):
 
 #プレイヤーを動かす
 def move_player():
-    global player_x,player_y,score,candy
+    global player_x,player_y,score,candy,is_jumping,jump_count
 
     if key == "w":
         if check_wall(player_x,player_y,DIR_UP,20) == False:
@@ -125,39 +128,38 @@ def move_player():
         if check_wall(player_x,player_y,DIR_RIGHT,20) == False :
             player_x = player_x + 20
     if key == "e":
-        if check_wall(player_x,player_y,DIR_UP,20) == False and check_wall(player_x,player_y,DIR_RIGHT,20) == False :
+        if check_wall(player_x,player_y,DIR_UP,20) == False and check_wall(player_x,player_y,DIR_RIGHT,20) == False and not is_jumping :
             player_y = player_y - 20
             player_x = player_x + 20
     if key == "q":
-        if check_wall(player_x,player_y,DIR_UP,20) == False and check_wall(player_x,player_y,DIR_LEFT,20) == False :
+        if check_wall(player_x,player_y,DIR_UP,20) == False and check_wall(player_x,player_y,DIR_LEFT,20) == False and not is_jumping:
             player_y = player_y - 20
             player_x = player_x - 20
     if key == "x":
-        if check_wall(player_x,player_y,DIR_DOWN,20) == False and check_wall(player_x,player_y,DIR_RIGHT,20) == False :
+        if check_wall(player_x,player_y,DIR_DOWN,20) == False and check_wall(player_x,player_y,DIR_RIGHT,20) == False and not is_jumping :
             player_y = player_y + 20
             player_x = player_x + 20
     if key == "z":
-        if check_wall(player_x,player_y,DIR_DOWN,20) == False and check_wall(player_x,player_y,DIR_LEFT,20) == False :
+        if check_wall(player_x,player_y,DIR_DOWN,20) == False and check_wall(player_x,player_y,DIR_LEFT,20) == False and not is_jumping :
             player_y = player_y + 20
             player_x = player_x - 20 
 
-    if key == "space":
-        player_y = player_y - 1
-        player_y = player_y - 1
-        player_y = player_y - 1
-        player_y = player_y - 1
-        player_y = player_y - 1
-        player_y = player_y - 1
-        player_y = player_y - 1
-        player_y = player_y + 1
-        player_y = player_y + 1
-        player_y = player_y + 1
-        player_y = player_y + 1
-        player_y = player_y + 1
-        player_y = player_y + 1
-        player_y = player_y + 1
-        player_y = player_y + 1
-        player_y = player_y + 1
+    if key == "space"and not is_jumping:  
+        is_jumping = True
+
+      # ジャンプの処理
+    if is_jumping:
+        if jump_count >= -6:
+            neg = 1
+            if jump_count < 0:
+                neg = -1
+            player_y -= (jump_count ** 2) * neg
+            jump_count -= 1
+        else:
+            jump_count = 6
+            is_jumping = False
+               
+        
     mx = int(player_x/60)
     my = int(player_y/60)
     if map_data[my][mx] == 3:
@@ -191,6 +193,7 @@ def move_enemy():
     if enemy_d == DIR_RIGHT:
         if check_wall(enemy_x,enemy_y,enemy_d,speed) == False:
             enemy_x = enemy_x + speed
+
     if abs(enemy_x-player_x) <= 40 and abs(enemy_y-player_y)<=40:
         idx = 2
             
