@@ -202,8 +202,8 @@ def main():
     draw_screen()
     if idx  == 0:
         canvas.create_image(360,200,tag="SCREEN")
-        draw_txt("Press SPACE!",360,380,30,"yellow")
-        if key == "space":
+        draw_txt("Press ENTER!",360,380,30,"yellow")
+        if key == "Return":
             score = 0
             set_stage()
             set_chara_pos()
@@ -217,15 +217,15 @@ def main():
 
     if idx == 2:
         draw_txt("GAME OVER",360,250,40,"red")
-        draw_txt("Press SPACE!",360,380,30,"yellow")
-        if key == "space":
+        draw_txt("Press ENTER!",360,380,30,"yellow")
+        if key == "Return":
             idx = 0
             
 
     if idx == 3:
         draw_txt("STAGE CLEAR",360,270,40,"pink")
-        draw_txt("Press SPACE!",360,380,30,"yellow")
-        if key == "space":
+        draw_txt("Press ENTER!",360,380,30,"yellow")
+        if key == "Return":
             idx = 0
     root.after(100,main)
 
@@ -239,7 +239,7 @@ img_bg = [
 ]
 img_player = tkinter.PhotoImage(file="pen03.png")
 img_enemy = tkinter.PhotoImage(file="red03.png")
-root.title("トップビューアクション")
+root.title("ペンギンアクション")
 
 root.resizable(False,False)
 root.bind("<KeyPress>",key_down)
