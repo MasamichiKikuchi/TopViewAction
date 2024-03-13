@@ -14,6 +14,7 @@ def key_up(e):
     global key
     key = ""
 
+#キャラクターの向きの関数
 DIR_UP = 0
 DIR_DOWN = 1
 DIR_LEFT = 2
@@ -22,20 +23,23 @@ DIR_RIGHT = 3
 is_jumping = False  # ジャンプ中かどうかのフラグ
 jump_count = 6  # ジャンプの高さ調整
 
-idx = 0
+idx = 0#画面遷移のインデックス
 score = 0
 candy = 0
 
+#プレイヤーの位置
 player_x = 0
 player_y = 0
 
+#敵の位置
 enemy_x = 0
 enemy_y = 0
 enemy_d = 0#敵の向き
 
 map_data = []
 
-def set_stage():#ステージのデータをセットする
+#ステージのデータをセットする
+def set_stage():
     global map_data,candy
     map_data = [
     [0,1,1,1,1,1,1,1,1,1,1,0],
@@ -50,6 +54,7 @@ def set_stage():#ステージのデータをセットする
     ]
     candy = 4
 
+#キャラクターの初期位置を設定
 def set_chara_pos():
     global player_x,player_y
     global enemy_x,enemy_y,enemy_d
@@ -58,13 +63,14 @@ def set_chara_pos():
     enemy_x = 630
     enemy_y = 450
 
-def draw_txt(txt,x,y,siz,col):#文字の描画
+#文字の描画
+def draw_txt(txt,x,y,siz,col):
     fnt = ("Times New Roman",siz,"bold")
     canvas.create_text(x+2,y+2,text=txt,fill="black",font=fnt,tag="SCREEN")
-    canvas.create_text(x,y,text=txt,fill=col,font=fnt,tag="SCREEN")
+    canvas.create_text(x,y,text=txt,fill=col,font=fnt,tag="SCREEN")   
 
-
-def draw_screen():#ステージの描画
+#ステージの描画
+def draw_screen():
     canvas.delete("SCREEN")
     for y in range(9):
         for x in range(12):
@@ -143,11 +149,10 @@ def move_player():
         if check_wall(player_x,player_y,DIR_DOWN,20) == False and check_wall(player_x,player_y,DIR_LEFT,20) == False and not is_jumping :
             player_y = player_y + 20
             player_x = player_x - 20 
-
     if key == "space"and not is_jumping:  
         is_jumping = True
 
-      # ジャンプの処理
+    # ジャンプの処理
     if is_jumping:
         if jump_count >= -6:
             neg = 1
@@ -158,15 +163,17 @@ def move_player():
         else:
             jump_count = 6
             is_jumping = False
-               
-        
+                  
     mx = int(player_x/60)
     my = int(player_y/60)
+    
+    #アイテムゲットの処理
     if map_data[my][mx] == 3:
         score = score + 100
         map_data[my][mx] = 2
         candy = candy - 1
 
+#敵を動かす
 def move_enemy():
     global idx,enemy_x,enemy_y,enemy_d
     speed = 10
@@ -196,7 +203,8 @@ def move_enemy():
 
     if abs(enemy_x-player_x) <= 40 and abs(enemy_y-player_y)<=40:
         idx = 2
-            
+
+#メインループ            
 def main():
     global key,koff,idx,score
     draw_screen()
